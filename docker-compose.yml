@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./workshop_project
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./workshop_project:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=sqlite:///db.sqlite3
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=workshop_db
+      - POSTGRES_USER=workshop_user
+      - POSTGRES_PASSWORD=workshop_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
